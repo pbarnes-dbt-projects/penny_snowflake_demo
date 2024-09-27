@@ -1,0 +1,171 @@
+version: 2
+
+sources:
+  - name: stocks
+    description: ""
+    database: doug_demo_v2
+    tables:
+      - name: fund_ownership
+        description: Table detailing ownership of funds by various organizations.
+        columns:
+          - name: symbol
+            description: Ticker symbol of the fund.
+            data_tests:
+              - not_null
+          - name: report_date
+            description: The date when the ownership data was reported.
+            data_tests:
+              - not_null
+          - name: organization
+            description: Name or identifier of the organization owning the fund.
+          - name: pct_held
+            description: Percentage of the fund held by the organization.
+          - name: position
+            description: The specific position or rank of the organization based on fund ownership.
+          - name: value
+            description: Value of the fund held by the organization.
+          - name: pct_change
+            description: Percentage change in the organization's fund ownership from the last report.
+
+      - name: grade_history
+        description: Table detailing the historical grading changes made by various firms for different symbols.
+        columns:
+          - name: symbol
+            description: Ticker symbol for which the grade change has occurred.
+          - name: epoch_grade_date
+            description: The date (in epoch time format) when the grade change was reported or made.
+          - name: firm
+            description: Name or identifier of the firm that made the grade change.
+          - name: to_grade
+            description: The new grade assigned to the symbol.
+          - name: from_grade
+            description: The previous grade of the symbol before the change.
+          - name: action
+            description: Specific action or reason leading to the grade change (e.g., "upgrade", "downgrade").
+
+      - name: history
+        description: Table detailing the historical price data and related attributes for each symbol.
+        columns:
+          - name: symbol
+            description: Ticker symbol for which the historical data is captured.
+            data_tests:
+              - not_null
+          - name: date
+            description: Date of the recorded historical data.
+            data_tests:
+              - not_null
+          - name: close
+            description: Closing price of the symbol on the given date.
+          - name: volume
+            description: Trading volume for the symbol on the given date.
+          - name: open
+            description: Opening price of the symbol on the given date.
+          - name: high
+            description: Highest traded price of the symbol on the given date.
+          - name: low
+            description: Lowest traded price of the symbol on the given date.
+          - name: adjclose
+            description: Adjusted closing price, accounting for any corporate actions like splits or dividends.
+          - name: dividends
+            description: Dividend amount issued for the symbol on the given date, if any.
+          - name: splits
+            description: Stock split ratio on the given date, if any (e.g., "2:1" for a 2-for-1 split).
+
+      - name: insider_transactions
+        description: Table detailing transactions made by company insiders, capturing the nature, and value of the transactions.
+        columns:
+          - name: symbol
+            description: Ticker symbol of the company for which the insider transaction has occurred.
+            data_tests:
+              - not_null
+          - name: shares
+            description: Number of shares involved in the insider transaction.
+          - name: filer_url
+            description: URL pointing to details or profile of the insider (filer).
+          - name: transaction_text
+            description: Textual description or summary of the insider transaction (e.g., "Purchased", "Sold").
+          - name: filer_name
+            description: Full name of the insider (filer) executing the transaction.
+          - name: filer_relation
+            description: Relation of the filer to the company (e.g., "CEO", "Director").
+          - name: money_text
+            description: Textual representation of the monetary value of the transaction (e.g., "$1,000,000").
+          - name: start_date
+            description: Date on which the insider transaction started or was executed.
+          - name: ownership
+            description: Type or nature of ownership after the transaction (e.g., "Direct", "Indirect").
+          - name: value
+            description: Monetary value of the shares transacted.
+
+
+      - name: recommendation_trends
+        description: Table detailing the recommendation trends for various stocks, indicating analyst consensus on buying, holding, or selling.
+        columns:
+          - name: symbol
+            description: Ticker symbol of the company for which the recommendation trends are captured.
+          - name: period
+            description: Time period for which the recommendations are given (e.g., "Q1 2023", "Jan 2023").
+          - name: strong_buy
+            description: Number of analysts giving a "Strong Buy" recommendation for the stock.
+          - name: buy
+            description: Number of analysts recommending to "Buy" the stock.
+          - name: hold
+            description: Number of analysts suggesting to "Hold" or maintain the current stock position.
+          - name: sell
+            description: Number of analysts recommending to "Sell" the stock.
+          - name: strong_sell
+            description: Number of analysts giving a "Strong Sell" recommendation for the stock.
+
+
+      - name: sec_filings
+        description: Table detailing the various SEC filings associated with different companies.
+        columns:
+          - name: symbol
+            description: Ticker symbol of the company for which the SEC filing pertains.
+          - name: date
+            description: The textual representation of the date on which the SEC filing was made.
+          - name: epoch_date
+            description: The date (in epoch time format) of the SEC filing.
+          - name: type
+            description: Type or category of the SEC filing (e.g., "10-K", "10-Q", "8-K").
+          - name: title
+            description: Brief title or description of the specific SEC filing.
+          - name: edgar_url
+            description: URL link to the specific filing on the EDGAR database.
+
+      - name: summary_profile
+        description: "General information and summary details about a company or entity."
+        columns:
+          - name: address1
+            description: "The primary street address of the company or entity."
+          - name: city
+            description: "The city where the company or entity is located."
+          - name: state
+            description: "The state or province where the company or entity is located."
+          - name: zip
+            description: "The postal code of the company or entity's location."
+          - name: country
+            description: "The country where the company or entity is headquartered."
+          - name: phone
+            description: "The main contact phone number for the company or entity."
+          - name: website
+            description: "The official website URL of the company or entity."
+          - name: industry
+            description: "The specific industry in which the company or entity operates."
+          - name: sector
+            description: "The broader sector or category of the economy in which the company or entity belongs."
+          - name: long_business_summary
+            description: "A detailed description or overview of the company or entity's primary operations and business activities."
+          - name: full_time_employees
+            description: "The number of full-time employees currently employed by the company or entity."
+          - name: symbol
+            description: "The unique ticker symbol used to represent the company or entity in the stock market."
+            data_tests:
+              - not_null
+              - unique
+          - name: address2
+            description: "Any secondary street address or suite number associated with the company or entity."
+
+      - name: income_statement
+      - name: balance_sheet
+      - name: cash_flow

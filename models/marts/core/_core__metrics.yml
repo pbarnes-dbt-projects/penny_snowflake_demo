@@ -1,0 +1,61 @@
+version: 2
+
+
+metrics:
+  - name: cumulative_revenue_total
+    description: The cumulative revenue for the business
+    type: cumulative
+    label: Cumulative Revenue (All-Time)
+    type_params:
+      measure:
+        name: total_revenue
+    
+  - name: cumulative_revenue_ttm
+    description: Cumulative revenue for the trailing twelve months
+    type: cumulative
+    label: Cumulative Revenue (TTM)
+    type_params:
+      cumulative_type_params:
+        window: 12 months
+      measure:
+        name: total_revenue
+  
+  - name: total_profit
+    description: The total profit for the business
+    type: derived
+    label: Total Profit
+    type_params:
+      expr: revenue - expense
+      metrics:
+        - name: total_revenue
+          alias: revenue
+        - name: total_expense
+          alias: expense
+    
+  - name: weekly_customers
+    description: Number of active weekly customers
+    type: cumulative
+    label: Weekly Active Customers
+    type_params:
+      cumulative_type_params:
+        window: 7 days
+      measure:
+        name: total_customers
+
+  - name: monthly_customers
+    description: Number of active monthly customers
+    type: cumulative
+    label: Monthly Active Customers
+    type_params:
+      cumulative_type_params:
+        window: 1 month
+      measure:
+        name: total_customers
+  
+  - name: average_revenue_per_customer
+    description: The average revenue per customer
+    type: ratio
+    label: Average Revenue per Customer
+    type_params:
+      numerator: total_revenue
+      denominator: total_customers
