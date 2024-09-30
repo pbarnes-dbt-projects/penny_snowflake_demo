@@ -1,5 +1,5 @@
 projects:
-  - name: upstream
+  - name: penny_snowflake_demo_upstream
 
 packages:
   - package: dbt-labs/codegen
