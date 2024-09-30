@@ -1,5 +1,5 @@
 with page_views as (
-    select * from {{ ref('upstream', 'int_segment__pages') }}
+    select * from {{ ref('penny_snowflake_demo_upstream', 'int_segment__pages') }}
 )
 
 select
