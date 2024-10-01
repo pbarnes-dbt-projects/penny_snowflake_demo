@@ -1,6 +1,7 @@
 {{
     config(
-        materialized = 'table'
+        materialized = 'table',
+        enabled = True
     )
 }}
 with part as (
