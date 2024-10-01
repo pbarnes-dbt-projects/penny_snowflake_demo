@@ -155,7 +155,7 @@ models:
         description: foreign key for customers
         data_tests:
           - relationships:
-              to: ref('dim_customers', 'latest')
+              to: ref('dim_customers')
               field: customer_key
               severity: error
       - name: order_date

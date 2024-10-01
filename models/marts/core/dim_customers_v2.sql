@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized = 'table',
-        transient=false
-    )
-}}
 
 {{
     config(
