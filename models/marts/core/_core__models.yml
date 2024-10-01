@@ -4,6 +4,7 @@ models:
   - name: dim_customers
     description: Customer dimensions table
     access: public
+    latest_version: "{{ 2 if target.name == 'uat' else 1 }}"
     columns:
       - name: customer_key
         description: Primary key on the customers table
@@ -30,6 +31,14 @@ models:
         description: '{{ doc("account_balance") }}'
       - name: market_segment
         description: market segment of the customer
+      
+    versions:
+    
+      - v: 1
+      - v: 2
+        config:
+          tags: ['uat']
+
 
   - name: dim_parts
     description: Parts dimensions table
