@@ -4,7 +4,7 @@
 
     {% if custom_schema_name == 'uat' %}
 
-        {{ default_schema | trim }}
+        {{ custom_schema_name | trim }}    
 
     {% elif custom_schema_name is not none and env_var('DBT_TARGET_ENV', 'dev') in ('staging', 'prod') %}
 
@@ -12,7 +12,7 @@
 
     {% else %}
 
-
+         {{ default_schema | trim }}
 
     {% endif %}
 
