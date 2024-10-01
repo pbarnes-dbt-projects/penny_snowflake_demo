@@ -1,7 +1,7 @@
 {% macro generate_schema_name(custom_schema_name, node) %}
 
     {% set default_schema = target.schema %}
-d
+
     {% if custom_schema_name == 'uat' %}
 
         {{ default_schema | trim }}
