@@ -47,3 +47,4 @@ from
     final
 order by
     customer_key
+limit 2
