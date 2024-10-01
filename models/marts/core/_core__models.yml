@@ -38,6 +38,7 @@ models:
       - v: 2
         config:
           tags: ['uat']
+          schema: uat
 
 
   - name: dim_parts
