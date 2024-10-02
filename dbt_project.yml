@@ -29,7 +29,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 vars:
   start_date: '1999-01-01'
-  dbt_cloud_account_id: 43786
+  dbt_cloud_account_id: 381671
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
