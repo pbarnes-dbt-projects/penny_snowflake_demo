@@ -4,13 +4,17 @@
 
         {{ custom_alias_name | trim }}
 
-    {%- elif node.version != node.latest_version -%}
-
-        {{ return(node.name ~ "_old" | replace(".", "_")) }}
-
     {%- elif node.version == node.latest_version -%}
         
         {{ node.name | trim }}
+        
+    {%- elif node.version < node.latest_version -%}
+
+        {{ return(node.name ~ "_deprecated" | replace(".", "_")) }}
+
+    {%- elif node.version > node.latest_version -%}
+
+        {{ return(node.name ~ "_prerelease" | replace(".", "_")) }}
 
     {%- else -%}
 
