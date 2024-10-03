@@ -1,0 +1,7 @@
+id,name,opened_at,tax_rate
+ead98cdb-77e3-4275-9b4a-3d3ccf15dd2d,Philadelphia,2018-09-01T00:00:00,0.06
+aab57844-e9d4-4cc9-a9d3-c123a54f81aa,Brooklyn,2019-03-12T00:00:00,0.04
+ca7fc21d-0cc0-4c73-b2a9-fe0e48402181,Chicago,2020-04-28T00:00:00,0.0625
+720a194f-1b36-42be-83f9-55e2e9e8b818,San Francisco,2020-05-08T00:00:00,0.075
+bec5f83b-4eda-4e9b-9378-1c79b56aea89,New Orleans,2021-03-09T00:00:00,0.04
+1c6ddaac-eb2e-4f8c-93a9-e03a7d0eae4f,Los Angeles,2021-09-12T00:00:00,0.08
