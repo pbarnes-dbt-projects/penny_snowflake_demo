@@ -12,6 +12,8 @@ models:
         data_tests:
           - unique
           - not_null
+        constraints:
+          - type: primary_key
         meta:
           contains_pii: true
       - name: industry

@@ -30,6 +30,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 vars:
   start_date: '1999-01-01'
   dbt_cloud_account_id: 381671
+  ci_mode: False
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
@@ -51,6 +52,12 @@ models:
         +group: sales
     ml:
       +enabled: false
+
+flags:
+  warn_error_options:
+    silence:
+      - ConstraintNotEnforced
+      - ConstraintNotSupported
 
 seeds:
   tpch:
