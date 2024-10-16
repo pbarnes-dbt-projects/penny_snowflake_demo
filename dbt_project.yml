@@ -53,11 +53,7 @@ models:
     ml:
       +enabled: false
 
-flags:
-  warn_error_options:
-    silence:
-      - ConstraintNotEnforced
-      - ConstraintNotSupported
+
 
 seeds:
   tpch:
