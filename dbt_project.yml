@@ -58,6 +58,7 @@ flags:
     silence:
       - ConstraintNotEnforced
       - ConstraintNotSupported
+      - UnsupportedConstraintMaterialization
 
 seeds:
   tpch:
