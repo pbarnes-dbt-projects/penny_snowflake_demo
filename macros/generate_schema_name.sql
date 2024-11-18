@@ -2,14 +2,18 @@
 
     {% set default_schema = target.schema %}
 
-    {% if custom_schema_name is not none and env_var('DBT_TARGET_ENV', 'dev') in ('staging', 'prod') %}
+    {%- if custom_schema_name is none -%}
 
-        {{ custom_schema_name | trim }}
+        {{ default_schema }}
 
-    {% else %}
+    {% elif custom_schema_name == 'uat' %}
 
-        {{ default_schema | trim }}
+        {{ custom_schema_name | trim }} 
 
-    {% endif %}
+    {%- else -%}
+
+        {{ default_schema }}_{{ custom_schema_name | trim }}
+
+    {%- endif -%}
 
 {% endmacro %}

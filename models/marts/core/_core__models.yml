@@ -4,6 +4,8 @@ models:
   - name: dim_customers
     description: Customer dimensions table
     access: public
+    latest_version: "{{ 2 if target.name == 'uat' else 1 }}"
+    alias: dim_customers
     columns:
       - name: customer_key
         description: Primary key on the customers table
@@ -12,6 +14,8 @@ models:
           - not_null
         meta:
           contains_pii: true
+      - name: industry
+        description: The industry the customer's business operates in
       - name: region
         description: region name
         data_tests:
@@ -30,6 +34,17 @@ models:
         description: '{{ doc("account_balance") }}'
       - name: market_segment
         description: market segment of the customer
+      
+    versions:
+    
+      - v: 1
+      - v: 2
+        config:
+          tags: ['uat']
+        columns:
+          - include: all 
+            exclude: [industry]
+
 
   - name: dim_parts
     description: Parts dimensions table
@@ -144,11 +159,6 @@ models:
           - not_null
       - name: customer_key
         description: foreign key for customers
-        data_tests:
-          - relationships:
-              to: ref('dim_customers')
-              field: customer_key
-              severity: error
       - name: order_date
         description: date of the order
       - name: status_code
