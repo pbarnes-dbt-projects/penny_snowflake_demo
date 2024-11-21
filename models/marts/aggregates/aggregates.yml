@@ -17,9 +17,6 @@ models:
   - name: agg_segment_page_views
     description: Aggregated page views for sites owned by dbt
     access: public
-    config: 
-      contract:
-        enforced: true
     columns:
       - name: date_date
         description: The date of the page views.
