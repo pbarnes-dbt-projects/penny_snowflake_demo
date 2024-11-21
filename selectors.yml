@@ -3,7 +3,7 @@ selectors:
     description: >
         Only resources from the root project.
         Excludes resources defined in installed packages.
-    default: true
+    default: false
     definition:
       method: package
       value: tpch
