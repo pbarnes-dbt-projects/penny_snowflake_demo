@@ -17,3 +17,19 @@ models:
   - name: agg_segment_page_views
     description: Aggregated page views for sites owned by dbt
     access: public
+    config: 
+      contract:
+        enforced: true
+    columns:
+      - name: date_date
+        description: The date of the page views.
+        data_type: date
+      - name: page_source
+        description: The source of the page (e.g., 'Google', 'Direct').
+        data_type: string
+      - name: page_title
+        description: The title of the page being viewed.
+        data_type: string
+      - name: total_page_views
+        description: The total number of views for the page.
+        data_type: integer
