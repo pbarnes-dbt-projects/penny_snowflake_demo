@@ -138,7 +138,6 @@ models:
       - name: order_item_key
         description: '{{ doc("order_item_key") }}'
         data_tests:
-          - unique
           - not_null
       - name: order_key
         description: foreign key for orders
