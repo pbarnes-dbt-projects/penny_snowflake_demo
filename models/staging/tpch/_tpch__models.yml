@@ -82,6 +82,8 @@ models:
  
   - name: stg_tpch_orders
     description: staging layer for orders data
+    config:
+      event_time: order_time
     columns:
       - name: order_key
         description: primary key of the model
@@ -96,6 +98,8 @@ models:
         description: raw price
       - name: order_date
         description: date the order was made
+      - name: order_time
+        description: time the order was made
       - name: priority_code
         description: code associated with the order
       - name: clerk_name
@@ -104,6 +108,7 @@ models:
         description: numeric representation of the shipping priority, zero being the default
       - name: comment
         description: '{{ doc("comment") }}'
+
 
   - name: stg_tpch_part_suppliers
     description: staging layer for suppliers data

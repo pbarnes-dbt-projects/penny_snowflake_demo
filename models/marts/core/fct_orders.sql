@@ -1,10 +1,15 @@
 {{
     config(
-        materialized = 'table',
-        tags=['finance']
+        materialized='incremental',
+        incremental_strategy='microbatch',
+        event_time='order_time',
+        batch_size='day',
+        lookback=3,
+        begin=microbatch_begin(),
+        full_refresh=True,
+        tags = ['finance']
     )
 }}
-
 
 with orders as (
 
@@ -25,7 +30,8 @@ order_item_summary as (
         sum(gross_item_sales_amount) as gross_item_sales_amount,
         sum(item_discount_amount) as item_discount_amount,
         sum(item_tax_amount) as item_tax_amount,
-        sum(net_item_sales_amount) as net_item_sales_amount
+        sum(net_item_sales_amount) as net_item_sales_amount,
+        count_if(is_return = true) as return_count
     from order_item
     group by
         1
@@ -37,20 +43,25 @@ final as (
 
         orders.order_key,
         orders.order_date,
+        orders.order_time,
         orders.customer_key,
         orders.status_code,
         orders.priority_code,
-        orders.ship_priority,
         orders.clerk_name,
+        orders.ship_priority,
         1 as order_count,
-        order_item_summary.gross_item_sales_amount,
+        order_item_summary.return_count,
         order_item_summary.item_discount_amount,
         order_item_summary.item_tax_amount,
-        order_item_summary.net_item_sales_amount
+        order_item_summary.net_item_sales_amount,
+        case
+            when order_date = '2024-09-21' then 1 / 0
+            else gross_item_sales_amount
+        end as gross_item_sales_amount
     from
         orders
-    inner join order_item_summary
-        on orders.order_key = order_item_summary.order_key
+        inner join order_item_summary
+            on orders.order_key = order_item_summary.order_key
 )
 
 select *
