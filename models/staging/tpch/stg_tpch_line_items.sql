@@ -1,6 +1,6 @@
 with source as (
 
-    select * from {{ source('tpch', 'lineitem') }}
+    select * from {{ source('tpch_now', 'lineitem') }}
 
 ),
 
@@ -20,8 +20,25 @@ renamed as (
         l_extendedprice as extended_price,
         l_discount as discount_percentage,
         l_tax as tax_rate,
-        l_returnflag as return_flag,
-        l_linestatus as status_code,
+        
+        case 
+            when l_returnflag in ('R') then 'returned'
+            when l_returnflag in ('A') then 'accepted'
+            else 'unknown'
+        end as return_flag, 
+
+        case 
+            when return_flag = 'accepted' then false
+            else true
+        end as is_return,
+
+        case l_linestatus 
+            when 'P' then 'returned'
+            when 'F' then 'billed'
+            when 'O' then 'shipped'
+            else null
+        end as status_code,
+        
         l_shipdate as ship_date,
         l_commitdate as commit_date,
         l_receiptdate as receipt_date,
