@@ -54,7 +54,7 @@ final as (
         order_item_summary.item_tax_amount,
         order_item_summary.net_item_sales_amount,
         case
-            when order_date = '2024-09-21' then 1 / 0
+            when order_date = '2024-09-21' then gross_item_sales_amount
             else gross_item_sales_amount
         end as gross_item_sales_amount
     from
