@@ -37,26 +37,15 @@ flags:
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
 models:
-  use_anonymous_sproc: true
 
-  tpch:
+  cloud_demo_foundational:
     staging:
       +materialized: view
       tpch:
         +tags: "pii"
-      stocks:
-        +group: investment_research
 
     marts:
       core:
         +materialized: table
         +group: sales
-    ml:
-      +enabled: false
 
-seeds:
-  tpch:
-    snowflake_contract_rates:
-      +column_types:
-        effective_date: DATE
-        rate: NUMBER
