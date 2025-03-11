@@ -4,7 +4,7 @@
         incremental_strategy='microbatch',
         event_time='order_time',
         batch_size='day',
-        lookback=3,
+        lookback=7,
         begin=microbatch_begin(),
         tags = ['finance']
     )
@@ -54,7 +54,7 @@ final as (
         order_item_summary.item_tax_amount,
         order_item_summary.net_item_sales_amount,
         case
-            when order_date = '2024-09-21' then gross_item_sales_amount
+            when order_date = '2025-02-19' then gross_item_sales_amount * 1000000000
             else gross_item_sales_amount
         end as gross_item_sales_amount
     from

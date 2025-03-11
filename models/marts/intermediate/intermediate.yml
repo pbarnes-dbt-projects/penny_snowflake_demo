@@ -5,6 +5,8 @@ models:
     description: Intermediate model where we calculate item price, discounts and tax. This model is at the order item level.
     tags:
       - output_table_type|orders
+    config:
+      event_time: order_time
     columns:
       - name: order_item_key
         description: '{{ doc("order_item_key") }}'
@@ -21,6 +23,8 @@ models:
         description: foreign key for suppliers
       - name: order_date
         description: date of the order
+      - name: order_time
+        description: datetime of the order
       - name: order_status_code
         description: status of the order
       - name: return_flag
