@@ -29,6 +29,7 @@ vars:
   start_date: '1999-01-01'
   dbt_cloud_account_id: 219562
   dev_targets: ['dev', 'default']
+  dynamic_start_time: '{{ microbatch_begin() }}'
 
 flags:
   require_model_names_without_spaces: True
