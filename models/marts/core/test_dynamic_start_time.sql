@@ -1,0 +1,1 @@
+select * from {{ ref('fct_orders') }} where order_time >= '{{var('dynamic_start_time')}}'
