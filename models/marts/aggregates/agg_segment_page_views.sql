@@ -1,3 +1,8 @@
+
+{{ config(
+  enabled= false
+) }}
+
 with page_views as (
     select * from {{ ref('penny_snowflake_demo_upstream', 'int_segment__pages') }}
 )
