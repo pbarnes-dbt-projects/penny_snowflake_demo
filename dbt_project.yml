@@ -5,6 +5,7 @@
 name: 'cloud_demo_foundational'
 version: '1.0.0'
 config-version: 2
+profile: penny_core
 
 
 # These configurations specify where dbt should look for different types of files.
