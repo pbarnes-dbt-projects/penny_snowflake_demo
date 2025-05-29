@@ -1,5 +1,5 @@
 {%- macro current_timestamp() -%}
-    {{ adapter.dispatch('current_timestamp', 'dbt')()}}
+    {{ adapter.dispatch('current_timestamp', 'dbt')() }}
 {%- endmacro -%}
 
 {% macro default__current_timestamp() -%}

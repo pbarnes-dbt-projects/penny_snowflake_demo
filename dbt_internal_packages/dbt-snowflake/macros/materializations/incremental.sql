@@ -47,7 +47,7 @@
     {{ return("table") }}
   {% elif tmp_relation_type == "view" %}
     {{ return("view") }}
-  {% elif strategy in ("default", "merge", "append") %}
+  {% elif strategy in ("default", "merge", "append", "insert_overwrite") %}
     {{ return("view") }}
   {% elif strategy in ["delete+insert", "microbatch"] and unique_key is none %}
     {{ return("view") }}
@@ -72,7 +72,7 @@
 	database=database,
 	type='table',
 	table_format=config.get('table_format', 'default')
-    ) -%}
+  ) -%}
 
   {% set existing_relation = load_relation(this) %}
 
@@ -111,7 +111,7 @@
 
   {% elif target_relation.table_format != existing_relation.table_format %}
     {% do exceptions.raise_compiler_error(
-        "Unable to alter incremental model `" ~ target_relation.identifier  ~ "` to '" ~ target_relation.table_format ~ " table format due to Snowflake limitation. Please execute with --full-refresh to drop the table and recreate in new table format.'"
+        "Unable to update the incremental model `" ~ target_relation.identifier ~ "` from `" ~ existing_relation.table_format ~ "` to `" ~ target_relation.table_format ~ "` due to Snowflake limitation. Please execute with --full-refresh to drop the table and recreate in the new catalog.'"
       )
     %}
 
