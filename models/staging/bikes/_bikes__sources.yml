@@ -15,7 +15,9 @@ sources:
           - name: lat
         data_tests:
           - dbt_utils.expression_is_true:
-              expression: "lat between -90 and 90"
+              arguments:
+                expression: "lat between -90 and 90"
           - dbt_utils.expression_is_true:
-              expression: "lon between -180 and 180"
+              arguments:
+                expression: "lon between -180 and 180"
       - name: station_status_flatten_full

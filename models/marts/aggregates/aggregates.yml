@@ -16,7 +16,6 @@ models:
 
   - name: agg_segment_page_views
     description: Aggregated page views for sites owned by dbt
-    access: public
     columns:
       - name: date_date
         description: The date of the page views.
@@ -30,3 +29,5 @@ models:
       - name: total_page_views
         description: The total number of views for the page.
         data_type: integer
+    config:
+      access: public

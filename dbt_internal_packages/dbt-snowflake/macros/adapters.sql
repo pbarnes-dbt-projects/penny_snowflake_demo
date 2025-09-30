@@ -1,3 +1,4 @@
+-- funcsign: (string, dict[string, model]) -> string
 {% macro get_column_comment_sql(column_name, column_dict) -%}
   {% if (column_name|upper in column_dict) -%}
     {% set matched_column = column_name|upper -%}
@@ -15,6 +16,7 @@
   {%- endif -%}
 {% endmacro %}
 
+-- funcsign: (dict[string, model], list[string]) -> string
 {% macro get_persist_docs_column_list(model_columns, query_columns) %}
 (
   {% for column_name in query_columns %}
@@ -24,7 +26,7 @@
 )
 {% endmacro %}
 
-
+-- funcsign: (relation) -> list[api.column]
 {% macro snowflake__get_columns_in_relation(relation) -%}
   {%- set sql -%}
     describe table {{ relation.render() }}
@@ -47,6 +49,7 @@
   {% do return(columns) %}
 {% endmacro %}
 
+-- funcsign: (relation) -> agate_table
 {% macro snowflake__show_object_metadata(relation) %}
   {%- set sql -%}
     show objects in {{ relation.include(identifier=False) }} starts with '{{ relation.identifier }}' limit 1
@@ -56,6 +59,7 @@
   {{ return(result) }}
 {% endmacro %}
 
+-- funcsign: (string) -> agate_table
 {% macro snowflake__list_schemas(database) -%}
   {# 10k limit from here: https://docs.snowflake.net/manuals/sql-reference/sql/show-schemas.html#usage-notes #}
   {% set maximum = 10000 %}
@@ -85,13 +89,14 @@
   {{ return(load_result('check_schema_exists').table) }}
 {%- endmacro %}
 
-
+-- funcsign: (relation, string, string) -> string
 {% macro snowflake__alter_column_type(relation, column_name, new_column_type) -%}
   {% call statement('alter_column_type') %}
     alter {{ relation.get_ddl_prefix_for_alter() }} table {{ relation.render() }} alter {{ adapter.quote(column_name) }} set data type {{ new_column_type }};
   {% endcall %}
 {% endmacro %}
 
+-- funcsign: (relation, string) -> string
 {% macro snowflake__alter_relation_comment(relation, relation_comment) -%}
     {%- if relation.is_dynamic_table -%}
         {%- set relation_type = 'dynamic table' -%}
@@ -101,7 +106,7 @@
     comment on {{ relation_type }} {{ relation.render() }} IS $${{ relation_comment | replace('$', '[$]') }}$$;
 {% endmacro %}
 
-
+-- funcsign: (relation, dict[string, model]) -> string
 {% macro snowflake__alter_column_comment(relation, column_dict) -%}
     {% set existing_columns = adapter.get_columns_in_relation(relation) | map(attribute="name") | list %}
     {% if relation.is_dynamic_table -%}
@@ -115,17 +120,17 @@
     {% endfor %}
 {% endmacro %}
 
-
+-- funcsign: () -> agate_table
 {% macro get_current_query_tag() -%}
   {{ return(run_query("show parameters like 'query_tag' in session").rows[0]['value']) }}
 {% endmacro %}
 
-
+-- funcsign: () -> optional[agate_table]
 {% macro set_query_tag() -%}
     {{ return(adapter.dispatch('set_query_tag', 'dbt')()) }}
 {% endmacro %}
 
-
+-- funcsign: () -> optional[agate_table]
 {% macro snowflake__set_query_tag() -%}
   {% set new_query_tag = config.get('query_tag') %}
   {% if new_query_tag %}
@@ -137,12 +142,12 @@
   {{ return(none)}}
 {% endmacro %}
 
-
+-- funcsign: (optional[string]) -> string
 {% macro unset_query_tag(original_query_tag) -%}
     {{ return(adapter.dispatch('unset_query_tag', 'dbt')(original_query_tag)) }}
 {% endmacro %}
 
-
+-- funcsign: (optional[string]) -> string
 {% macro snowflake__unset_query_tag(original_query_tag) -%}
   {% set new_query_tag = config.get('query_tag') %}
   {% if new_query_tag %}
@@ -156,7 +161,7 @@
   {% endif %}
 {% endmacro %}
 
-
+-- funcsign: (relation, optional[list[base_column]], optional[list[base_column]]) -> string
 {% macro snowflake__alter_relation_add_remove_columns(relation, add_columns, remove_columns) %}
 
     {% if relation.is_dynamic_table -%}
@@ -194,7 +199,7 @@
 {% endmacro %}
 
 
-
+-- funcsign: (string) -> string
 {% macro snowflake_dml_explicit_transaction(dml) %}
   {#
     Use this macro to wrap all INSERT, MERGE, UPDATE, DELETE, and TRUNCATE
@@ -211,7 +216,7 @@
 
 {% endmacro %}
 
-
+-- funcsign: (relation) -> string
 {% macro snowflake__truncate_relation(relation) -%}
   {% set truncate_dml %}
     truncate table {{ relation.render() }}

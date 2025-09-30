@@ -3,7 +3,7 @@
     Use with care if calling elsewhere.
 #} */
 
-
+-- funcsign: (list[string]) -> string
 {% macro get_quoted_csv(column_names) %}
 
     {% set quoted = [] %}
@@ -17,6 +17,7 @@
 {% endmacro %}
 
 
+-- funcsign: (list[base_column], list[base_column]) -> list[base_column]
 {% macro diff_columns(source_columns, target_columns) %}
 
   {% set result = [] %}
@@ -34,7 +35,7 @@
 
 {% endmacro %}
 
-
+-- funcsign: (list[base_column], list[base_column]) -> list[dict[string, string]]
 {% macro diff_column_data_types(source_columns, target_columns) %}
 
   {% set result = [] %}
@@ -51,10 +52,12 @@
 
 {% endmacro %}
 
+-- funcsign: (optional[list[string]], optional[list[string]], list[base_column]) -> list[string]
 {% macro get_merge_update_columns(merge_update_columns, merge_exclude_columns, dest_columns) %}
   {{ return(adapter.dispatch('get_merge_update_columns', 'dbt')(merge_update_columns, merge_exclude_columns, dest_columns)) }}
 {% endmacro %}
 
+-- funcsign: (optional[list[string]], optional[list[string]], list[base_column]) -> list[string]
 {% macro default__get_merge_update_columns(merge_update_columns, merge_exclude_columns, dest_columns) %}
   {%- set default_cols = dest_columns | map(attribute="quoted") | list -%}
 

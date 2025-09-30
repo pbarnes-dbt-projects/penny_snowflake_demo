@@ -1,11 +1,14 @@
+-- funcsign: (string) -> string
 {% macro resolve_model_name(input_model_name) %}
     {{ return(adapter.dispatch('resolve_model_name', 'dbt')(input_model_name)) }}
 {% endmacro %}
 
+-- funcsign: (string) -> string
 {%- macro default__resolve_model_name(input_model_name) -%}
     {{  input_model_name | string | replace('"', '\"') }}
 {%- endmacro -%}
 
+-- funcsign: (model) -> string
 {% macro build_ref_function(model) %}
 
     {%- set ref_dict = {} -%}
@@ -98,7 +101,7 @@ class this:
 
 
 class dbtObj:
-    def __init__(self, load_df_function) -> None:
+    def __init__(self, load_df_function) -> string:
         self.source = lambda *args: source(*args, dbt_load_df_function=load_df_function)
         self.ref = lambda *args, **kwargs: ref(*args, **kwargs, dbt_load_df_function=load_df_function)
         self.config = config

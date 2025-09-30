@@ -3,25 +3,26 @@ version: 2
 models:
   - name: dim_customers
     description: Customer dimensions table
-    access: public
-    latest_version: "{{ 2 if target.name == 'uat' else 1 }}"
-    alias: dim_customers
+    latest_version: 1
     columns:
       - name: customer_key
         description: Primary key on the customers table
         data_tests:
           - unique
           - not_null
-        meta:
-          contains_pii: true
+        config:
+          meta:
+            contains_pii: true
       - name: industry
         description: The industry the customer's business operates in
       - name: region
         description: region name
         data_tests:
           - accepted_values:
-              values: ['AFRICA','MIDDLE EAST','ASIA','EUROPE','AMERICA']
-              severity: "{{ 'error' if target.name == 'prod' else 'warn' }}"
+              config:
+                severity: "{{ 'error' if target.name == 'prod' else 'warn' }}"
+              arguments:
+                values: ['AFRICA', 'MIDDLE EAST', 'ASIA', 'EUROPE', 'AMERICA']
       - name: name
         description: customer id
       - name: address
@@ -34,18 +35,20 @@ models:
         description: '{{ doc("account_balance") }}'
       - name: market_segment
         description: market segment of the customer
-      
+
     versions:
-    
       - v: 1
       - v: 2
         config:
           tags: ['uat']
         columns:
-          - include: all 
+          - include: all
             exclude: [industry]
 
 
+    config:
+      access: public
+      alias: dim_customers
   - name: dim_parts
     description: Parts dimensions table
     columns:
@@ -89,11 +92,8 @@ models:
         description: '{{ doc("phone_number") }}'
       - name: account_balance
         description: '{{ doc("account_balance") }}'
- 
-  
   - name: fct_orders
     description: orders fact table
-    access: public
     columns:
       - name: order_key
         description: primary key of the model
@@ -122,6 +122,8 @@ models:
       - name: net_item_sales_amount
         description: '{{ doc("net_item_sales_amount") }}'
 
+    config:
+      access: public
   - name: fct_orders_stats_sql
     description: Descriptive stats from the fct_orders table
     columns:
@@ -131,7 +133,6 @@ models:
           - not_null
 
   - name: fct_order_items
-    access: public
     description: order items fact table
     columns:
       - name: order_item_key
@@ -175,7 +176,7 @@ models:
       - name: nation_key
         description: 'Nation key'
         data_tests:
-         - not_null
+          - not_null
       - name: order_item_count
         description: count of order items
       - name: quantity
@@ -190,3 +191,5 @@ models:
         description: '{{ doc("item_tax_amount") }}'
       - name: net_item_sales_amount
         description: '{{ doc("net_item_sales_amount") }}'
+    config:
+      access: public

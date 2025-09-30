@@ -1,3 +1,4 @@
+-- funcsign: (relation, string) -> string
 {% macro snowflake__get_create_dynamic_table_as_sql(relation, sql) -%}
 {#-
 --  Produce DDL that creates a dynamic table
@@ -15,7 +16,8 @@
 
     {%- set dynamic_table = relation.from_config(config.model) -%}
 
-    {%- if dynamic_table.catalog.table_format == 'iceberg' -%}
+    {# TODO: This should be dynamic_table.catalog.table_format, but we do not yet support `catalog` as a value #}
+    {%- if dynamic_table.table_format == 'iceberg' -%}
         {{ _get_create_dynamic_iceberg_table_as_sql(dynamic_table, relation, sql) }}
     {%- else -%}
         {{ _get_create_dynamic_standard_table_as_sql(dynamic_table, relation, sql) }}
@@ -23,7 +25,7 @@
 
 {%- endmacro %}
 
-
+-- funcsign: (snowflake_node_config, relation, string) -> string
 {% macro _get_create_dynamic_standard_table_as_sql(dynamic_table, relation, sql) -%}
 {#-
 --  Produce DDL that creates a standard dynamic table
@@ -52,7 +54,7 @@
 
 {%- endmacro %}
 
-
+-- funcsign: (snowflake_node_config, relation, string) -> string
 {% macro _get_create_dynamic_iceberg_table_as_sql(dynamic_table, relation, sql) -%}
 {#-
 --  Produce DDL that creates a dynamic iceberg table

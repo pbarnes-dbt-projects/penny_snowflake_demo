@@ -3,10 +3,13 @@ groups:
     owner:
       name: Jordan Belfort
       email: investments@dbtlabs.com
-      slack: team-investment-research
-
+    config:
+      meta:
+        slack: team-investment-research
   - name: sales
     owner:
       name: Michael Scott
       email: sales@dbtlabs.com
-      slack: team-sales
+    config:
+      meta:
+        slack: team-sales

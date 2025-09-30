@@ -1,4 +1,9 @@
 {% set ref_orders = ref('fct_orders') %}
+{{
+    config(
+        enabled = 'true'
+    )
+}}
 
 with 
 

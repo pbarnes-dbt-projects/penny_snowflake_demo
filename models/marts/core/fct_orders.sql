@@ -1,18 +1,21 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='microbatch',
-        event_time='order_time',
-        batch_size='day',
-        lookback=7,
-        begin=microbatch_begin(),
-        tags = ['finance']
+        incremental_strategy='merge',
+        unique_key='order_key',
+        on_schema_change='fail',
+        tags=['finance']
     )
 }}
 
 with orders as (
 
     select * from {{ ref('stg_tpch_orders') }}
+    
+    {% if is_incremental() %}
+    -- Filter to recent data with a 7-day lookback
+    where order_time >= (select max(order_time) from {{ this }}) - interval '7 days'
+    {% endif %}
 
 ),
 

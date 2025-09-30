@@ -1,4 +1,9 @@
 /* Create a pivot table with hard-coded columns based on a query of the ship modes that are in the system */
+{{
+    config(
+        enabled = 'false'
+    )
+}}
 
 with merged as (
     select

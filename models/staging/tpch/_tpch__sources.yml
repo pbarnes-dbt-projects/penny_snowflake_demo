@@ -6,10 +6,6 @@ sources:
     description: '{{ doc("tpch_source") }}'
     database: doug_demo_v2
     schema: tpch
-    freshness:
-      warn_after: {count: 24, period: hour}
-      error_after: {count: 48, period: hour}
-    loaded_at_field: _etl_updated_timestamp
     tables:
       - name: orders
         description: main order tracking table
@@ -19,13 +15,14 @@ sources:
             data_tests:
               - not_null
               - unique
-                  
+
           - name: o_custkey
             description: Foreign Key to C_CUSTKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'customer')
-                  field: c_custkey
+                  arguments:
+                    to: source('tpch', 'customer')
+                    field: c_custkey
           - name: o_orderstatus
             description: status code of the order
           - name: o_totalprice
@@ -40,7 +37,6 @@ sources:
             description: numeric representation of the shipping priority, zero being the default
           - name: o_comment
             description: '{{ doc("comment") }}'
-          
       - name: customer
         description: main customer table
         columns:
@@ -51,24 +47,28 @@ sources:
               - unique
           - name: c_name
             description: customer id
-            meta:
-              masking_policy: encrypt_pii
+            config:
+              meta:
+                masking_policy: encrypt_pii
           - name: c_address
             description: address of the customer
-            meta:
-              masking_policy: encrypt_pii
+            config:
+              meta:
+                masking_policy: encrypt_pii
           - name: c_nationkey
             description: foreign key to stg_tpch_nations
             data_tests:
               - relationships:
-                  to: source('tpch', 'nation')
-                  field: n_nationkey
+                  arguments:
+                    to: source('tpch', 'nation')
+                    field: n_nationkey
           - name: c_phone
             description: phone number of the customer
-            meta:
-              masking_policy: encrypt_pii
+            config:
+              meta:
+                masking_policy: encrypt_pii
           - name: c_acctbal
-            description: raw account balance 
+            description: raw account balance
           - name: c_mktsegment
             description: market segment of the customer
           - name: c_comment
@@ -81,20 +81,23 @@ sources:
             description: Foreign Key to O_ORDERKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'orders')
-                  field: o_orderkey
+                  arguments:
+                    to: source('tpch', 'orders')
+                    field: o_orderkey
           - name: l_partkey
-            description:  Foreign key to P_PARTKEY, first part of the compound Foreign Key to (PS_PARTKEY,PS_SUPPKEY) with L_SUPPKEY
+            description: Foreign key to P_PARTKEY, first part of the compound Foreign Key to (PS_PARTKEY,PS_SUPPKEY) with L_SUPPKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'part')
-                  field: p_partkey
+                  arguments:
+                    to: source('tpch', 'part')
+                    field: p_partkey
           - name: l_suppkey
             description: Foreign key to S_SUPPKEY, second part of the compound Foreign Key to (PS_PARTKEY, PS_SUPPKEY) with L_PARTKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'supplier')
-                  field: s_suppkey
+                  arguments:
+                    to: source('tpch', 'supplier')
+                    field: s_suppkey
           - name: l_linenumber
             description: sequence of the order items within the order
           - name: l_quantity
@@ -124,7 +127,6 @@ sources:
 
       - name: nation
         description: nation mapping
-        freshness: null
         columns:
           - name: n_nationkey
             description: 25 nations are populated
@@ -137,11 +139,14 @@ sources:
             description: Foreign Key to R_REGIONKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'region')
-                  field: r_regionkey
+                  arguments:
+                    to: source('tpch', 'region')
+                    field: r_regionkey
           - name: n_comment
             description: '{{ doc("comment") }}'
 
+        config:
+          freshness:
       - name: part
         description: main part table
         columns:
@@ -166,8 +171,9 @@ sources:
             description: raw retail price
             data_tests:
               - dbt_utils.accepted_range:
-                  min_value: 0
-                  max_value: 2000
+                  arguments:
+                    min_value: 0
+                    max_value: 2000
           - name: p_comment
             description: '{{ doc("comment") }}'
 
@@ -178,24 +184,25 @@ sources:
             description: Foreign Key to P_PARTKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'part')
-                  field: p_partkey
+                  arguments:
+                    to: source('tpch', 'part')
+                    field: p_partkey
           - name: ps_suppkey
             description: Foreign Key to S_SUPPKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'supplier')
-                  field: s_suppkey
+                  arguments:
+                    to: source('tpch', 'supplier')
+                    field: s_suppkey
           - name: ps_availqty
             description: raw available quantity
           - name: ps_supplycost
-            description: raw cost 
+            description: raw cost
           - name: ps_comment
             description: '{{ doc("comment") }}'
 
       - name: region
         description: region mapping
-        freshness: null
         columns:
           - name: r_regionkey
             description: 5 regions are populated
@@ -206,13 +213,15 @@ sources:
             description: region name
             data_tests:
               - accepted_values:
-                  values: ['AFRICA', 'AMERICA', 'ASIA', 'EUROPE', 'MIDDLE EAST']
+                  arguments:
+                    values: ['AFRICA', 'AMERICA', 'ASIA', 'EUROPE', 'MIDDLE EAST']
           - name: r_comment
             description: '{{ doc("comment") }}'
 
+        config:
+          freshness:
       - name: supplier
         description: main supplier table
-        freshness: null
         columns:
           - name: s_suppkey
             description: SF*10,000 are populated
@@ -227,8 +236,9 @@ sources:
             description: Foreign Key to N_NATIONKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'nation')
-                  field: n_nationkey
+                  arguments:
+                    to: source('tpch', 'nation')
+                    field: n_nationkey
           - name: s_phone
             description: phone number of the supplier
           - name: s_acctbal
@@ -236,6 +246,13 @@ sources:
           - name: s_comment
             description: '{{ doc("comment") }}'
 
+        config:
+          freshness:
+    config:
+      freshness:
+        warn_after: {count: 24, period: hour}
+        error_after: {count: 48, period: hour}
+      loaded_at_field: _etl_updated_timestamp
   - name: tpch_snapshot
     database: analytics
     schema: dbt_mwinkler
@@ -247,9 +264,11 @@ sources:
             description: unique customer key
             data_tests:
               - unique:
-                  severity: warn
+                  config:
+                    severity: warn
               - not_null:
-                  severity: warn
+                  config:
+                    severity: warn
           - name: c_name
           - name: c_address
           - name: c_nationkey
@@ -262,33 +281,24 @@ sources:
     description: Welcome to the dbt Labs demo dbt project! We use the [TPCH dataset](https://docs.snowflake.com/en/user-guide/sample-data-tpch.html) to create a sample project to emulate what a production project might look like!
     database: raw
     schema: tpch_now
-    freshness:
-      warn_after:
-        count: 24
-        period: hour
-      error_after:
-        count: 48
-        period: hour
-    loaded_at_field: o_ordertime
- 
-
     tables:
       - name: orders
         description: main order tracking table
-        
+
         columns:
           - name: o_orderkey
             description: SF*1,500,000 are sparsely populated
-            data_tests: 
+            data_tests:
               - unique
               - not_null
-                  
+
           - name: o_custkey
             description: Foreign Key to C_CUSTKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'customer')
-                  field: c_custkey
+                  arguments:
+                    to: source('tpch', 'customer')
+                    field: c_custkey
           - name: o_orderstatus
             description: status code of the order
           - name: o_totalprice
@@ -307,26 +317,28 @@ sources:
             description: '{{ doc("comment") }}'
       - name: lineitem
         description: main lineitem table
-        freshness: null
         columns:
           - name: l_orderkey
             description: Foreign Key to O_ORDERKEY
             data_tests:
               - relationships:
-                  to: source('tpch_now', 'orders')
-                  field: o_orderkey
+                  arguments:
+                    to: source('tpch_now', 'orders')
+                    field: o_orderkey
           - name: l_partkey
-            description:  Foreign key to P_PARTKEY, first part of the compound Foreign Key to (PS_PARTKEY,PS_SUPPKEY) with L_SUPPKEY
+            description: Foreign key to P_PARTKEY, first part of the compound Foreign Key to (PS_PARTKEY,PS_SUPPKEY) with L_SUPPKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'part')
-                  field: p_partkey
+                  arguments:
+                    to: source('tpch', 'part')
+                    field: p_partkey
           - name: l_suppkey
             description: Foreign key to S_SUPPKEY, second part of the compound Foreign Key to (PS_PARTKEY, PS_SUPPKEY) with L_PARTKEY
             data_tests:
               - relationships:
-                  to: source('tpch', 'supplier')
-                  field: s_suppkey
+                  arguments:
+                    to: source('tpch', 'supplier')
+                    field: s_suppkey
           - name: l_linenumber
             description: sequence of the order items within the order
           - name: l_quantity
@@ -341,13 +353,16 @@ sources:
             description: letter determining the status of the return (R=returned, A=accepted)
             data_tests:
               - accepted_values:
-                  values: ['R','A']
-                  severity: warn
+                  config:
+                    severity: warn
+                  arguments:
+                    values: ['R', 'A']
           - name: l_linestatus
             description: status code of the order item (P=returned, F=billed, O=shipped)
             data_tests:
-            - accepted_values:
-                values: ['P','F','O']
+              - accepted_values:
+                  arguments:
+                    values: ['P', 'F', 'O']
           - name: l_shipdate
             description: the date the order item is being shipped
           - name: l_commitdate
@@ -360,3 +375,14 @@ sources:
             description: method of shipping
           - name: l_comment
             description: '{{ doc("comment") }}'
+        config:
+          freshness:
+    config:
+      freshness:
+        warn_after:
+          count: 24
+          period: hour
+        error_after:
+          count: 48
+          period: hour
+      loaded_at_field: o_ordertime
