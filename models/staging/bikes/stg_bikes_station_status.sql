@@ -1,3 +1,6 @@
+
+{{ config(enabled=false) }}
+
 with source as (
     select * from {{ source('bikes', 'station_status_flatten_full') }}
 ),
